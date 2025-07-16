@@ -9,4 +9,5 @@ Thanks for reading that!
 
 # Commands:
 
-PRESS Z TO ZOOM
+PRESS Z TO SWITCH ZOOM
+PRESS X TO TURN ON/OFF LABELS

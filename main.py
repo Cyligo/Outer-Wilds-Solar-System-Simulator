@@ -17,6 +17,7 @@ SCALE = 0.4e-9
 ZOOM_SCALE = 1e-9
 
 zoomed = False
+labed = True
 
 class Body:
     def __init__(self, x, y, vx, vy, mass, color, radius, name):
@@ -74,9 +75,11 @@ class Body:
 
         # Draw the name of the planet
         font = pygame.font.SysFont("Arial", 15) if zoomed else pygame.font.SysFont("Arial", 10)
-        text_surface = font.render(self.name, True, (255, 255, 255))
+        text_surface = font.render(self.name, True, (255, 255, 255)) if labed else font.render("", True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(screen_x, screen_y + self.radius + 12))
         screen.blit(text_surface, text_rect)
+        
+        
     
 bodies = [
     Body(0,0,0,0, 1.989e30, (255,255,0), 15, "Sun"),
@@ -107,6 +110,12 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z:
                 zoomed = not zoomed
+                
+            if event.key == pygame.K_ESCAPE:
+                running = False
+            
+            if event.key == pygame.K_x:
+                labed = not labed
                 
             for body in bodies:
                 body.trail = []  # Clear trails on zoom toggle
