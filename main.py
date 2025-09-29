@@ -6,6 +6,7 @@ import pygame
 
 # pygame setup
 pygame.init()
+pygame.mixer.init()
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Outer Wilds Solar System Simulation")
@@ -80,10 +81,10 @@ class Body:
         screen.blit(text_surface, text_rect)
         
         
-    
+        
 bodies = [
     Body(0,0,0,0, 1.989e30, (255,255,0), 15, "Sun"),
-
+    
     Body(5.79e10, 1e9, -2e3, 4.74e4, 4.302e23, (255,75,8), 5, "Ash Twin"),
     
     Body(5.81e10, -1e9, 2e3, 4.74e4, 4.302e23, (250,75,8), 5, "Ember Twin"),
@@ -103,10 +104,38 @@ bodies = [
 
 running = True
 while running:
+    time = int(pygame.time.get_ticks() / 1000)  # Get time in seconds
+
+    #Sun recolor
+    if time == 254:
+        bodies[0].color = (255,205,0)
+    if time == 528:
+        bodies[0].color = (255,155,0)
+    if time == 782:
+        bodies[0].color = (255,105,0)
+    if time == 1036:
+        bodies[0].color = (255,55,0)
+    if time == 1200:
+        bodies[0].color = (255,20,0)
+
+    # Time ends
+    if time == 1203:
+        pygame.mixer.music.load("endtimes.mp3")
+        pygame.mixer.music.play()
+        pygame.mixer.music.set_volume(0.5)
+    if time == 1290:
+        radius = 1
+        bodies = [Body(0, 0, 0, 0, 1.989e31, (0,200,255), radius, "Supernova")]
+    if time >= 1290:
+        bodies[0].radius += 1
+    if time == 1320:
+        running = False
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             
+        # Keybinds
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_z:
                 zoomed = not zoomed
