@@ -3,6 +3,19 @@
 
 import math
 import pygame
+import sys
+import os
+
+# Verify if running in an executable, if not, use relative path
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+audio_src = resource_path("endtimes.mp3")
 
 # pygame setup
 pygame.init()
@@ -132,14 +145,14 @@ while running:
 
     # Time ends
     if time == 1203:
-        pygame.mixer.music.load("endtimes.mp3")
+        pygame.mixer.music.load(audio_src)
         pygame.mixer.music.play()
         pygame.mixer.music.set_volume(0.5)
     if time == 1290:
         radius = 1
         bodies = [Body(0, 0, 0, 0, 1.989e31, (0,200,255), radius, "Supernova")]
     if time >= 1291:
-        bodies[0].radius += 1
+        bodies[0].radius += 0.33
     if time >= 1320:
         running = False
 
@@ -151,13 +164,15 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 change_time += 30
-                if time >= 1320:
-                    change_time = 1320
+                if time >= 1196:
+                    change_time = 1196
 
             if event.key == pygame.K_DOWN:
                 change_time -= 30
                 if time <= 30:
                     change_time = 0
+                if time >= 1196:
+                    change_time = 1196
 
             if event.key == pygame.K_z:
                 zoomed = not zoomed
