@@ -126,7 +126,7 @@ running = True
 while running:
     time = int(pygame.time.get_ticks() / 1000) + change_time # Get time in seconds
 
-    #Sun recolor
+    #Sun stages
     if (time >= 254) and (time <= 527):
         bodies[0].color = (255,205,0)
         bodies[0].radius = 15.5
