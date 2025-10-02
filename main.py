@@ -126,7 +126,7 @@ running = True
 while running:
     time = int(pygame.time.get_ticks() / 1000) + change_time # Get time in seconds
 
-    #Sun recolor
+    #Sun stages
     if (time >= 254) and (time <= 527):
         bodies[0].color = (255,205,0)
         bodies[0].radius = 15.5
@@ -164,15 +164,15 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 change_time += 30
-                if time >= 1196:
-                    change_time = 1196
+                if time >= 1190:
+                    change_time = 1190
 
             if event.key == pygame.K_DOWN:
                 change_time -= 30
                 if time <= 30:
                     change_time = 0
-                if time >= 1196:
-                    change_time = 1196
+                if time >= 1190:
+                    change_time = 1190
 
             if event.key == pygame.K_z:
                 zoomed = not zoomed
