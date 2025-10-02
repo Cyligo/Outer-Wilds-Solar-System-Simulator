@@ -63,7 +63,8 @@ class Body:
         font = pygame.font.SysFont("Arial", 30)
         text_surface = font.render(text, True, text_color)
         screen.blit(text_surface, (x, y))
-        
+
+
     def draw(self, screen):
         if len(self.trail) > 1:
             pygame.draw.lines(screen, (50, 50, 50), False, self.trail, 1)
@@ -79,9 +80,16 @@ class Body:
         text_surface = font.render(self.name, True, (255, 255, 255)) if labed else font.render("", True, (0, 0, 0))
         text_rect = text_surface.get_rect(center=(screen_x, screen_y + self.radius + 12))
         screen.blit(text_surface, text_rect)
-        
-        
-        
+
+def draw_timer(screen, time):
+    font = pygame.font.SysFont("Arial", 24)
+    minutes = time // 60
+    seconds = time % 60
+    timer_text = f"Time: {minutes:02d}:{seconds:02d}"
+    text_surface = font.render(timer_text, True, (255, 255, 255))
+    screen.blit(text_surface, (10, 10))
+
+
 bodies = [
     Body(0,0,0,0, 1.989e30, (255,255,0), 15, "Sun"),
     
@@ -100,23 +108,27 @@ bodies = [
     Body(5.50e11,0,0,3.48e3,4.024e23,(50,100,255),6, "Interloper"),
 ]
 
-
-
+change_time = 0
 running = True
 while running:
-    time = int(pygame.time.get_ticks() / 1000)  # Get time in seconds
+    time = int(pygame.time.get_ticks() / 1000) + change_time # Get time in seconds
 
     #Sun recolor
-    if time == 254:
+    if (time >= 254) and (time <= 527):
         bodies[0].color = (255,205,0)
-    if time == 528:
+        bodies[0].radius = 15.5
+    if (time >= 528) and (time <= 781):
         bodies[0].color = (255,155,0)
-    if time == 782:
+        bodies[0].radius = 16
+    if (time >= 782) and (time <= 1035):
         bodies[0].color = (255,105,0)
-    if time == 1036:
+        bodies[0].radius = 16.5
+    if (time >= 1036) and (time <= 1199):
         bodies[0].color = (255,55,0)
-    if time == 1200:
+        bodies[0].radius = 17
+    if (time >= 1200) and (time <= 1289):
         bodies[0].color = (255,20,0)
+        bodies[0].radius = 17.5
 
     # Time ends
     if time == 1203:
@@ -126,9 +138,9 @@ while running:
     if time == 1290:
         radius = 1
         bodies = [Body(0, 0, 0, 0, 1.989e31, (0,200,255), radius, "Supernova")]
-    if time >= 1290:
+    if time >= 1291:
         bodies[0].radius += 1
-    if time == 1320:
+    if time >= 1320:
         running = False
 
     for event in pygame.event.get():
@@ -137,6 +149,16 @@ while running:
             
         # Keybinds
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP:
+                change_time += 30
+                if time >= 1320:
+                    change_time = 1320
+
+            if event.key == pygame.K_DOWN:
+                change_time -= 30
+                if time <= 30:
+                    change_time = 0
+
             if event.key == pygame.K_z:
                 zoomed = not zoomed
                 
@@ -154,7 +176,9 @@ while running:
     for body in bodies:
         body.update_position(bodies)
         body.draw(screen)
-        
+
+    draw_timer(screen, time)
+
     pygame.display.flip()  # Update the display
     clock.tick(60)  # Limit to 60 FPS
         
